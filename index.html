@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteStream — AI YouTube Notes Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Animated Background -->
+    <div class="bg-canvas">
+        <canvas id="particleCanvas"></canvas>
+        <div class="grid-overlay"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="scanline"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                        <rect x="2" y="5" width="18" height="12" rx="2" stroke="url(#navGrad)" stroke-width="1.5"/>
+                        <path d="M9 9L14 11L9 13V9Z" fill="url(#navGrad)"/>
+                        <defs>
+                            <linearGradient id="navGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#00D4FF"/>
+                                <stop offset="100%" stop-color="#0066FF"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">Note<span class="logo-accent">Stream</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="https://github.com/meddadaek" target="_blank" class="nav-link nav-github">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02.005 2.04.138 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/>
+                    </svg>
+                    GitHub
+                </a>
+                <a href="https://www.instagram.com/_med_aek/" target="_blank" class="nav-link nav-ig">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                    Instagram
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+
+                <div class="badge-wrap">
+                    <div class="badge">
+                        <span class="badge-pulse"></span>
+                        <span>AI-Powered Learning</span>
+                    </div>
+                </div>
+
+                <h1 class="hero-title">
+                    <span class="title-line">Turn YouTube Into</span>
+                    <span class="title-line gradient-text">Smart Study Notes</span>
+                    <span class="title-line title-sub">& Interactive Quizzes</span>
+                </h1>
+
+                <p class="hero-subtitle">
+                    Paste a YouTube link. Our AI extracts the transcript, builds structured notes, and generates quizzes to test your understanding — in seconds.
+                </p>
+
+                <!-- Language Selector -->
+                <div class="lang-row">
+                    <span class="lang-label">Transcript Language:</span>
+                    <div class="lang-select-wrap">
+                        <select id="langSelect" class="lang-select">
+                            <option value="en">🇬🇧 English</option>
+                            <option value="fr">🇫🇷 French</option>
+                            <option value="ar">🇩🇿 Arabic</option>
+                            <option value="es">🇪🇸 Spanish</option>
+                            <option value="de">🇩🇪 German</option>
+                            <option value="it">🇮🇹 Italian</option>
+                            <option value="pt">🇧🇷 Portuguese</option>
+                            <option value="ru">🇷🇺 Russian</option>
+                            <option value="ja">🇯🇵 Japanese</option>
+                            <option value="zh">🇨🇳 Chinese</option>
+                            <option value="ko">🇰🇷 Korean</option>
+                            <option value="tr">🇹🇷 Turkish</option>
+                        </select>
+                        <svg class="select-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Input -->
+                <div class="input-section">
+                    <div class="input-wrapper">
+                        <div class="input-border-glow"></div>
+                        <div class="input-icon">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                <rect x="1.5" y="4" width="15" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M7 7L11 9L7 11V7Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <input
+                            type="text"
+                            id="youtubeUrl"
+                            placeholder="https://youtube.com/watch?v=..."
+                            class="url-input"
+                        />
+                        <button id="generateBtn" class="generate-btn">
+                            <span class="btn-text">Generate</span>
+                            <span class="btn-icon">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                            </span>
+                            <span class="btn-shimmer"></span>
+                        </button>
+                    </div>
+                    <p class="input-hint">Works with videos that have captions or subtitles enabled</p>
+                </div>
+
+                <div class="trust-row">
+                    <span class="trust-item"><span class="trust-check">✓</span> Free to use</span>
+                    <span class="trust-divider">·</span>
+                    <span class="trust-item"><span class="trust-check">✓</span> No signup</span>
+                    <span class="trust-divider">·</span>
+                    <span class="trust-item"><span class="trust-check">✓</span> Quiz generator</span>
+                    <span class="trust-divider">·</span>
+                    <span class="trust-item"><span class="trust-check">✓</span> Multilingual</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading State -->
+    <div id="loadingSection" class="loading-section hidden">
+        <div class="container">
+            <div class="loading-card">
+                <div class="loading-visual">
+                    <div class="loading-rings">
+                        <div class="ring ring-1"></div>
+                        <div class="ring ring-2"></div>
+                        <div class="ring ring-3"></div>
+                    </div>
+                    <div class="loading-core">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="url(#starGrad)" stroke-width="1.5" fill="none"/>
+                            <defs>
+                                <linearGradient id="starGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#00D4FF"/>
+                                    <stop offset="100%" stop-color="#0066FF"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="loading-title" id="loadingTitle">Processing your video...</h3>
+                <p class="loading-text" id="loadingText">Extracting transcript and analyzing content</p>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
+                    <div class="progress-glow"></div>
+                </div>
+                <div class="loading-steps">
+                    <span class="lstep active" id="lstep1">Transcript</span>
+                    <span class="lstep-arrow">→</span>
+                    <span class="lstep" id="lstep2">Analysis</span>
+                    <span class="lstep-arrow">→</span>
+                    <span class="lstep" id="lstep3">Notes</span>
+                    <span class="lstep-arrow">→</span>
+                    <span class="lstep" id="lstep4">Quiz</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="resultsSection" class="results-section hidden">
+        <div class="container">
+
+            <!-- Tab Bar -->
+            <div class="tabs-bar">
+                <button class="tab-btn active" data-tab="notes">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M5 5H11M5 8H11M5 11H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    Study Notes
+                </button>
+                <button class="tab-btn" data-tab="quiz">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M8 5.5C8 5.5 6.5 5.5 6.5 7C6.5 8.5 8 8.5 8 9.5M8 11.5V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    Quiz Mode
+                    <span class="tab-badge" id="quizBadge">0</span>
+                </button>
+            </div>
+
+            <!-- Notes Tab -->
+            <div id="notesTab" class="tab-content active">
+                <div class="results-header">
+                    <div class="results-meta">
+                        <div class="results-badge">
+                            <span class="status-dot"></span>
+                            Notes Ready
+                        </div>
+                        <span class="results-time" id="timestamp"></span>
+                    </div>
+                    <div class="results-actions">
+                        <button id="downloadPdfBtn" class="action-btn primary">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M8 10L8 3M8 10L5.5 7.5M8 10L10.5 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M2.5 13H13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                            Download PDF
+                        </button>
+                        <button id="copyBtn" class="action-btn secondary">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <rect x="5" y="5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M2.5 10.5V3A.5.5 0 013 2.5H10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                            Copy
+                        </button>
+                        <button id="generateQuizBtn" class="action-btn quiz-btn">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M8 5.5C8 5.5 6.5 5.5 6.5 7C6.5 8.5 8 8.5 8 9.5M8 11.5V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                            Generate Quiz
+                        </button>
+                        <button id="newNoteBtn" class="action-btn ghost">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M8 4V12M4 8H12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                            New
+                        </button>
+                    </div>
+                </div>
+
+                <div class="notes-card">
+                    <div class="notes-card-header">
+                        <span class="notes-tag">AI Generated</span>
+                        <div class="notes-lang-badge" id="notesLangBadge"></div>
+                    </div>
+                    <div class="notes-content" id="notesContent"></div>
+                </div>
+            </div>
+
+            <!-- Quiz Tab -->
+            <div id="quizTab" class="tab-content hidden">
+                <div class="quiz-header">
+                    <div class="quiz-status" id="quizStatus">
+                        <span id="quizScoreDisplay"></span>
+                    </div>
+                    <div class="quiz-controls">
+                        <button id="retakeQuizBtn" class="action-btn secondary hidden">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M3 8A5 5 0 1014 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M3 5V8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Retake
+                        </button>
+                    </div>
+                </div>
+                <div id="quizContent" class="quiz-content">
+                    <div class="quiz-empty">
+                        <div class="quiz-empty-icon">?</div>
+                        <p>Click <strong>Generate Quiz</strong> in the Notes tab to create questions from your notes.</p>
+                    </div>
+                </div>
+                <div id="quizSubmitRow" class="quiz-submit-row hidden">
+                    <button id="submitQuizBtn" class="action-btn primary quiz-submit-btn">
+                        Submit Answers
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M3 8L7 12L13 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Capabilities</div>
+                <h2 class="section-title">Built for Serious Learners</h2>
+                <p class="section-subtitle">Every feature designed to accelerate your learning</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-num">01</div>
+                    <div class="feature-icon-wrap">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                            <rect x="3" y="3" width="22" height="22" rx="4" stroke="url(#fg1)" stroke-width="1.5"/>
+                            <path d="M14 8V20M8 14H20" stroke="url(#fg1)" stroke-width="2" stroke-linecap="round"/>
+                            <defs><linearGradient id="fg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D4FF"/><stop offset="100%" stop-color="#0066FF"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <h3>AI Note Extraction</h3>
+                    <p>Advanced LLM analyzes video transcripts and structures them into clean, organized study material with sections and key insights.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-num">02</div>
+                    <div class="feature-icon-wrap">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                            <circle cx="14" cy="14" r="11" stroke="url(#fg2)" stroke-width="1.5"/>
+                            <path d="M14 9C14 9 11 9 11 12C11 15 14 15 14 17M14 19.5V19" stroke="url(#fg2)" stroke-width="2" stroke-linecap="round"/>
+                            <defs><linearGradient id="fg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D4FF"/><stop offset="100%" stop-color="#0066FF"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <h3>Interactive Quiz Generator</h3>
+                    <p>Automatically generates multiple-choice questions from your notes to test comprehension. Track your score and retake as many times as needed.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-num">03</div>
+                    <div class="feature-icon-wrap">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                            <circle cx="14" cy="14" r="11" stroke="url(#fg3)" stroke-width="1.5"/>
+                            <text x="7" y="18" fill="url(#fg3)" font-size="9" font-family="sans-serif">A B</text>
+                            <defs><linearGradient id="fg3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D4FF"/><stop offset="100%" stop-color="#0066FF"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <h3>Multilingual Support</h3>
+                    <p>Process transcripts in 12+ languages including Arabic, French, Spanish, Chinese, Japanese and more. Notes and exports respect your chosen language.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-num">04</div>
+                    <div class="feature-icon-wrap">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                            <rect x="4" y="6" width="20" height="16" rx="2" stroke="url(#fg4)" stroke-width="1.5"/>
+                            <path d="M4 11H24" stroke="url(#fg4)" stroke-width="1.5"/>
+                            <path d="M9 15H19M9 19H14" stroke="url(#fg4)" stroke-width="1.5" stroke-linecap="round"/>
+                            <defs><linearGradient id="fg4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D4FF"/><stop offset="100%" stop-color="#0066FF"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <h3>PDF Export</h3>
+                    <p>Download your notes as a beautifully formatted PDF — ready for printing, sharing, or archiving. Professional layout with headings and bullet points.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Process</div>
+                <h2 class="section-title">Three Steps to Mastery</h2>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <div class="step-connector"></div>
+                    <h3>Paste a YouTube Link</h3>
+                    <p>Copy any YouTube URL with captions enabled. Select your preferred language for the transcript.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <div class="step-connector"></div>
+                    <h3>AI Builds Your Notes</h3>
+                    <p>Our AI extracts the transcript, structures it into clear sections with key concepts and takeaways.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <h3>Study & Test Yourself</h3>
+                    <p>Review your notes, generate a quiz to test understanding, and download as PDF when ready.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Toast -->
+    <div id="toast" class="toast hidden">
+        <svg class="toast-icon" width="18" height="18" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
+            <path d="M7 10L9 12L13 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span id="toastMessage">Success!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                            <rect x="2" y="5" width="18" height="12" rx="2" stroke="url(#footerGrad)" stroke-width="1.5"/>
+                            <path d="M9 9L14 11L9 13V9Z" fill="url(#footerGrad)"/>
+                            <defs>
+                                <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#00D4FF"/>
+                                    <stop offset="100%" stop-color="#0066FF"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <span>NoteStream</span>
+                    </div>
+                    <p>Transform YouTube videos into smart study notes with AI</p>
+                </div>
+
+                <div class="footer-social">
+                    <a href="https://github.com/meddadaek" target="_blank" class="social-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02.005 2.04.138 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/>
+                        </svg>
+                        GitHub
+                    </a>
+                    <a href="https://www.instagram.com/_med_aek/" target="_blank" class="social-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                        Instagram
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <span>© 2026 NoteStream. All rights reserved.</span>
+                <span>Built by <a href="https://github.com/meddadaek" target="_blank" class="footer-author">AEK</a></span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

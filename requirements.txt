@@ -1,0 +1,7 @@
+flask
+flask-cors
+youtube-transcript-api
+groq
+reportlab
+python-dotenv
+gunicorn
