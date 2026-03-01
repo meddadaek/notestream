@@ -34,8 +34,7 @@
 
 </div>
 
-> **NoteStream** transforms any YouTube video into structured AI study notes and interactive quizzes — in seconds. No more rewinding, no more manual note-taking. Just paste a link and let AI do the work.
-⚠️ Currently live for 30 days.
+> **NoteStream** transforms any YouTube video into structured AI study notes and interactive quizzes — in seconds. No more rewinding, no more manual note-taking. Just paste a link and let AI do the work ⚠️ Currently live for 30 days.
 <br/>
 
 ```
