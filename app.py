@@ -26,7 +26,7 @@ CORS(app, resources={
 
 # Your Groq API key — put this in a .env file locally
 # On Railway, set it in the Variables tab
-groq_api_key = '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'
+groq_api_key = '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'
 client = Groq(api_key=groq_api_key)
 
 # Supported languages for transcript fallback order
