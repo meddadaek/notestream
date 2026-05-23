@@ -20,7 +20,7 @@
 
 <br/>
 
-### 🌐 **[notestream.up.railway.app](https://notestream.up.railway.app)**
+### 🌐 **THE FREE TRIAL ON RAILWAI END**
 
 <br/>
 
